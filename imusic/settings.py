@@ -52,9 +52,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google'
-    ''
-    '',
+    'allauth.socialaccount.providers.google',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -88,7 +87,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'imusic.wsgi.application'
-
+ASGI_APPLICATION = 'imusic.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -197,4 +204,5 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER")
 EMAIL_ADMIN = env("EMAIL_ADMIN")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
