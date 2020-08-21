@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <header id="header" class="bg-primary">
     <div class="d-flex align-items-center">
         <button type="button" class="btn toggle-menu mr-3" id="openSidebar">
@@ -12,8 +13,8 @@
             <div class="search-card" data-scrollable="true">
                 <div class="mb-3">
                     <div class="d-flex">
-                        <span class="text-uppercase mr-auto font-weight-bold text-dark">Track</span>
-                        <a href="#">View All</a>
+                        <span class="text-uppercase mr-auto font-weight-bold text-dark">{% trans 'Track' %}</span>
+                        <a href="#">{% trans 'View All' %}</a>
                     </div>
                     <hr>
                     <div class="row" id="search-track">
@@ -31,7 +32,7 @@
                                   d="M16,9V7H12V12.5C11.58,12.19 11.07,12 10.5,12A2.5,2.5 0 0,0 8,14.5A2.5,2.5 0 0,0 10.5,17A2.5,2.5 0 0,0 13,14.5V9H16M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2Z">
                             </path>
                         </svg>
-                        Upload
+                        {% trans 'Upload' %}
                     </a>
                 </li>
                 <li class="dropdown fade-in">
@@ -41,35 +42,28 @@
                         <div class="avatar avatar-sm avatar-circle">
                             <img src="{% static 'images/users/avatar.jpg' %}" alt="user">
                         </div>
-                        <span class="pl-2">Hello {{ request.user.name }}</span>
+                        <span class="pl-2">{% trans 'Hello' %} {{ request.user.name }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
                         <a class="dropdown-item" href="#">
                             <i class="ion-md-contact"></i>
-                            <span>Profile</span></a>
-                        <a class="dropdown-item" href="#">
-                            <i class="ion-md-radio-button-off"></i>
-                            <span>Your Plan</span>
-                        </a>
-                        <a class="dropdown-item" href="#">
-                            <i class="ion-md-settings"></i>
-                            <span>Settings</span>
-                        </a>
+                            <span>{% trans 'Profile' %}</span></a>
+                       
                         <div class="dropdown-divider"></div>
                         <div class="px-4 py-2">
-                            <a href="#" class="btn btn-sm btn-air btn-pill btn-danger">Logout</a>
+                            <a href="{% url 'logout'%}?next={{request.path}}" class="btn btn-sm btn-air btn-pill btn-danger">{% trans 'Logout' %}</a>
                         </div>
                     </div>
                 </li>
             {% else %}
                 <li>
-                    <a href="javascript:void(0);" data-toggle="modal" data-target="#login">
-                        <span>Login</span>
+                    <a href="{% url 'login' %}" >
+                        <span>{% trans 'Login' %}</span>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:void(0);" data-toggle="modal" data-target="#register">
-                        <span>Register</span>
+                    <a href="javascript:void(0);" >
+                        <span>{% trans 'Register' %}</span>
                     </a>
                 </li>
             {% endif %}

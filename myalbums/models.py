@@ -15,7 +15,7 @@ class MyModelName(models.Model):
     # Fields
     my_field_name = models.CharField(
         max_length=20, help_text='Enter field documentation')
-    ...
+    
 
     # Metadata
     class Meta:
@@ -39,7 +39,7 @@ class Category(models.Model):
         return reverse('category-detail', args=[str(self.id)])
 
     def __str__(self):
-        return f'{self.name_category}'
+        return self.name_category
     thumbnail = models.ImageField(upload_to="genres", default="default.jpeg")
 
 
@@ -50,7 +50,7 @@ class Album(models.Model):
         return reverse('album-detail', args=[str(self.id)])
 
     def __str__(self):
-        return f'{self.name_album}'
+        return self.name_album
 
 
 class Lyric(models.Model):
@@ -95,7 +95,7 @@ class Artist(models.Model):
         return reverse('artist-detail', args=[str(self.id)])
 
     def __str__(self):
-        return f'{self.name_artist}'
+        return self.name_artist
 
 
 class UserManager(BaseUserManager):
@@ -155,7 +155,7 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = []  # Email & Password are required by default.
 
     def __str__(self):
-        return f'{self.user_name}'
+        return self.user_name
 
     def get_full_name(self):
         # The user is identified by their email address
@@ -211,11 +211,11 @@ class Review(models.Model):
     user_review = models.ForeignKey('User', on_delete=models.CASCADE)
     date_review = models.DateTimeField(default=timezone.now)
     RATING_CHOICES = (
-        (1, '★'),
-        (2, '★★'),
-        (3, '★★★'),
-        (4, '★★★★'),
-        (5, '★★★★★'),
+        (1, 'so bad'),
+        (2, 'bad'),
+        (3, 'normal'),
+        (4, 'good'),
+        (5, 'so good'),
     )
     rating = models.IntegerField(choices=RATING_CHOICES)
 
@@ -233,7 +233,7 @@ class Follower(models.Model):
         unique_together = ('follower', 'following')
 
     def __str__(self):
-        return f'%s follows %s' % (self.follower, self.following)
+        return '%s follows %s'%(self.follower, self.following)
 
 
 class Favourite(models.Model):

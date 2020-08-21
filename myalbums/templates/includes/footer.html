@@ -1,3 +1,4 @@
+{% load i18n %}
 <div id="audioPlayer" class="player-primary">
     <div id="progress-container">
         <input type="range" class="amplitude-song-slider">
@@ -56,27 +57,27 @@
                 <li class="dropdown-item">
                     <a href="javascript:void(0);" class="dropdown-link">
                         <i class="la la-heart-o"></i>
-                        <span>Favorite</span>
+                        <span>{% trans 'Favorite' %}</span>
                     </a>
                 </li>
                 <li class="dropdown-item">
                     <a href="javascript:void(0);" class="dropdown-link">
-                        <i class="la la-plus"></i> <span>Add to Playlist</span>
+                        <i class="la la-plus"></i> <span>{% trans 'Add to Playlist' %}</span>
                     </a>
                 </li>
                 <li class="dropdown-item">
                     <a href="javascript:void(0);" class="dropdown-link">
-                        <i class="la la-download"></i> <span>Download</span>
+                        <i class="la la-download"></i> <span>{% trans 'Download' %}</span>
                     </a>
                 </li>
                 <li class="dropdown-item">
                     <a href="javascript:void(0);" class="dropdown-link">
-                        <i class="la la-share-alt"></i> <span>Share</span>
+                        <i class="la la-share-alt"></i> <span>{% trans 'Share' %}</span>
                     </a>
                 </li>
                 <li class="dropdown-item">
                     <a href="#" class="dropdown-link">
-                        <i class="la la-info-circle"></i> <span>Song Info</span>
+                        <i class="la la-info-circle"></i> <span>{% trans 'Song Info' %}</span>
                     </a>
                 </li>
             </ul>
@@ -91,15 +92,15 @@
             <a href="#" class="btn btn-dark btn-air platform-btn">
                 <i class="ion-logo-android"></i>
                 <div class="platform-btn-info">
-                    <span class="platform-desc">Available on</span>
-                    <span class="platform-name">Android</span>
+                    <span class="platform-desc">{% trans 'Available on' %}</span>
+                    <span class="platform-name">{% trans 'Android' %}</span>
                 </div>
             </a>
             <a href="#" class="btn btn-danger btn-air platform-btn">
                 <i class="ion-logo-apple"></i>
                 <div class="platform-btn-info">
-                    <span class="platform-desc">Available on</span>
-                    <span class="platform-name">App Store</span>
+                    <span class="platform-desc">{% trans 'Available on' %}</span>
+                    <span class="platform-name">{% trans 'App Store' %}</span>
                 </div>
             </a>
         </div>
@@ -111,7 +112,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h4 class="modal-title">Share</h4>
+                <h4 class="modal-title">{% trans 'Share' %}</h4>
                 <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
 
@@ -131,8 +132,9 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-danger btn-sm waves-effect waves-light" data-dismiss="modal">Close</button>
+                <button class="btn btn-danger btn-sm waves-effect waves-light" data-dismiss="modal">{% trans 'Close' %}</button>
             </div>
         </div>
     </div>
+
 </div>
