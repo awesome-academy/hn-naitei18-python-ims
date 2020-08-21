@@ -1,313 +1,153 @@
-/* JS Document */
+let csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
-/******************************
+$('#register-form').submit(function (e) {
+    e.preventDefault();
 
-[Table of Contents]
+    $.ajaxSetup({
+        headers: {
+            'X-CSRFToken': csrfmiddlewaretoken
+        }
+    });
 
-1. Vars and Inits
-2. Set Header
-3. Init Menu
-4. Init Home Slider
-5. Init Featured Album Player
-6. InitMagic
-7. Init Single Player
+    let form = $(this);
+
+    // form.find('#please-wait').removeClass('hidden');
+
+    $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (res) {
+
+            // form.find('#please-wait').addClass('hidden');
+
+            if (res.status === false) {
+                $('#register-error').text('');
+                $.each(res.errors, (index, item) => {
+                    $('#register-error').append(item + '<br/>');
+                });
+            }
+            if (res.status === true) {
+                $('#register-error').text(res.message);
+                // hide register modal and show login modal
+                setTimeout(function () {
+                    $("#register").modal("hide");
+                    $("#login").modal("show");
+                }, 2000);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+});
 
 
-******************************/
+$('#login-form').submit(function (e) {
+    e.preventDefault();
 
-$(document).ready(function()
-{
-	"use strict";
+    $.ajaxSetup({
+        headers: {
+            'X-CSRFToken': csrfmiddlewaretoken
+        }
+    });
 
-	/* 
+    let form = $(this);
 
-	1. Vars and Inits
+    // form.find('#please-wait').removeClass('hidden');
 
-	*/
+    $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (res) {
 
-	var header = $('.header');
-	var ctrl = new ScrollMagic.Controller();
+            // form.find('#please-wait').addClass('hidden');
 
-	initMenu();
-	initHomeSlider();
-	initAlbumPlayer();
-	initMagic();
-	initSinglePlayer();
+            if (res.status === false) {
+                $('#login-error').text('');
+                $.each(res.errors, (index, item) => {
+                    $('#login-error').append(item + '<br/>');
+                });
+            } else if (res.status === true) {
+                $('#login-error').text(res.message);
+                // Redirect to given url
+                setTimeout(function () {
+                    location.reload();
+                }, 2000);
+            }
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+});
 
-	setHeader();
+$(document).ready(function () {
 
-	$(window).on('resize', function()
-	{
-		setHeader();
-	});
+    $('#songFile').on('change', function (e) {
+        if ($(this).val().split("\\")[2]) {
+            $('#songName').val($(this).val().split("\\")[2]);
+            $('#songChoose').text($(this).val().split("\\")[2]);
+        }
+    });
 
-	$(document).on('scroll', function()
-	{
-		setHeader();
-	});
+    $('#audioPlayer').css('visibility', 'hidden');
 
-	/* 
+    $('input[type=radio][name=type]').change(function () {
+        if (this.value === 'free') {
+            $('#price').find("*").prop('disabled', true);
+        } else if (this.value === 'paid') {
+            $('#price').find("*").prop('disabled', false);
+        }
+    });
 
-	2. Set Header
+    // tag-it plugin
+    $("#song_tag").tagit();
 
-	*/
-
-	function setHeader()
-	{
-		if($(window).scrollTop() > 91)
-		{
-			header.addClass('scrolled');
-		}
-		else
-		{
-			header.removeClass('scrolled');
-		}
-	}
-
-	/* 
-
-	3. Init Menu
-
-	*/
-
-	function initMenu()
-	{
-		if($('.menu').length)
-		{
-			var hamb = $('.hamburger');
-			var menu = $('.menu');
-			var menuOverlay = $('.menu_overlay');
-
-			hamb.on('click', function()
-			{
-				menu.addClass('active');
-			});
-
-			menuOverlay.on('click', function()
-			{
-				menu.removeClass('active');
-			});
-		}
-	}
-
-	/* 
-
-	4. Init Home Slider
-
-	*/
-
-	function initHomeSlider()
-	{
-		if($('.home_slider').length)
-		{
-			var homeSlider = $('.home_slider');
-			homeSlider.owlCarousel(
-			{
-				animateOut: 'fadeOutLeft',
-    			animateIn: 'fadeInRight',
-				items:1,
-				loop:true,
-				autoplay:false,
-				autoplayTimeout:8000,
-				smartSpeed:1200,
-				autoplaySpeed:1200,
-				dotsSpeed:1200,
-				mouseDrag:false,
-				nav:false,
-				dots:true,
-				margin:250
-			});
-		}
-	}
-
-	/* 
-
-	5. Init Featured Album Player
-
-	*/
-
-	function initAlbumPlayer()
-	{
-		if($('#jplayer_1').length)
-		{
-			// Duration has to be entered manually
-			var playlist = 
-			[
-				{
-					title:"Better Days",
-					artist:"Bensound",
-					mp3:"files/bensound-betterdays.mp3",
-					duration:"2.33"
-				},
-				{
-					title:"Dubstep",
-					artist:"Bensound",
-					mp3:"files/bensound-dubstep.mp3",
-					duration:"2.04"
-				},
-				{
-					title:"Sunny",
-					artist:"Bensound",
-					mp3:"files/bensound-sunny.mp3",
-					duration:"2.20"
-				},
-				{
-					title:"Better Days",
-					artist:"Bensound",
-					mp3:"files/bensound-betterdays.mp3",
-					duration:"2.33"
-				},
-				{
-					title:"Dubstep",
-					artist:"Bensound",
-					mp3:"files/bensound-dubstep.mp3",
-					duration:"2.04"
-				},
-				{
-					title:"Sunny",
-					artist:"Bensound",
-					mp3:"files/bensound-sunny.mp3",
-					duration:"2.20"
-				}
-			];
-
-			var options =
-			{
-				playlistOptions:
-				{
-					autoPlay:false,
-					enableRemoveControls:false
-				},
-				play: function() // To avoid multiple jPlayers playing together.
-				{ 
-					$(this).jPlayer("pauseOthers");
-				},
-				solution: 'html',
-				supplied: 'oga, mp3',
-				useStateClassSkin: true,
-				preload: 'metadata',
-				volume: 0.2,
-				muted: false,
-				backgroundColor: '#000000',
-				cssSelectorAncestor: '#jp_container_1',
-				errorAlerts: false,
-				warningAlerts: false
-			};
-
-			var cssSel = 
-			{
-				jPlayer: "#jplayer_1",
-				cssSelectorAncestor: "#jp_container_1",
-				play: '.jp-play',
-				pause: '.jp-pause',
-				stop: '.jp-stop',
-				seekBar: '.jp-seek-bar',
-				playBar: '.jp-play-bar',
-				globalVolume: true,
-				mute: '.jp-mute',
-				unmute: '.jp-unmute',
-				volumeBar: '.jp-volume-bar',
-				volumeBarValue: '.jp-volume-bar-value',
-				volumeMax: '.jp-volume-max',
-				playbackRateBar: '.jp-playback-rate-bar',
-				playbackRateBarValue: '.jp-playback-rate-bar-value',
-				currentTime: '.jp-current-time',
-				duration: '.jp-duration',
-				title: '.jp-title',
-				fullScreen: '.jp-full-screen',
-				restoreScreen: '.jp-restore-screen',
-				repeat: '.jp-repeat',
-				repeatOff: '.jp-repeat-off',
-				gui: '.jp-gui',
-				noSolution: '.jp-no-solution'
-			};
-
-			var myPlaylist = new jPlayerPlaylist(cssSel,playlist,options);
-			
-			
-			setTimeout(function()
-			{
-				var items = $('.jp-playlist ul li > div');
-				for(var x = 0; x < items.length; x++)
-				{
-					var item = items[x];
-					var dur = playlist[x].duration;
-					var durationDiv = document.createElement('div');
-					durationDiv.className = "song_duration";
-					durationDiv.append(dur);
-					item.append(durationDiv);
-				}
-			},200);
-		}
-	}
-
-	/* 
-
-	6. Init Magic
-
-	*/
-
-	function initMagic()
-	{
-		if($('.image_overlay').length)
-		{
-			var eles = $('.image_overlay');
-			eles.each(function()
-			{
-				var ele = this;
-
-				var projectScene = new ScrollMagic.Scene(
-				{
-					triggerElement: ele,
-			        triggerHook: "onEnter",
-			        offset: 400,
-			        reverse:false
-				})
-				.setClassToggle(ele, 'active')
-				.addTo(ctrl);
-			});
-		}
-	}
-
-	/* 
-
-	7. Init Single Player
-
-	*/
-
-	function initSinglePlayer()
-	{
-		if($("#jplayer_2").length)
-		{
-			$("#jplayer_2").jPlayer({
-		ready: function () {
-			$(this).jPlayer("setMedia", {
-				title:"Better Days",
-					artist:"Bensound",
-					mp3:"files/bensound-betterdays.mp3"
-			});
-		},
-		play: function() { // To avoid multiple jPlayers playing together.
-			$(this).jPlayer("pauseOthers");
-		},
-		swfPath: "plugins/jPlayer",
-		supplied: "mp3",
-		cssSelectorAncestor: "#jp_container_2",
-		wmode: "window",
-		globalVolume: true,
-		useStateClassSkin: true,
-		autoBlur: false,
-		smoothPlayBar: true,
-		keyEnabled: true,
-		solution: 'html',
-		preload: 'metadata',
-		volume: 0.2,
-		muted: false,
-		backgroundColor: '#000000',
-		errorAlerts: false,
-		warningAlerts: false
-	});
-		}	
-	}
-
+    // search
+    $('#search').on('keyup', function () {
+        let keyword = $(this).val();
+        if (keyword !== '') {
+            $.ajax({
+                type: 'GET',
+                url: $(this).data('search-url') + '?q=' + keyword,
+                dataType: 'json',
+                success: function (res) {
+                    let search_track = $('#search-track');
+                    search_track.empty();
+                    if (res.songs.length > 0) {
+                        $.each(res.songs, function (index, song) {
+                            let artists = "";
+                            $.each(song.artists, function (i, artist) {
+                                if (i !== 0) artists += ", " + artist.name;
+                                else artists += artist.name;
+                            });
+                            search_track.append('<div class="col-xl-4 col-md-6 col-12">\n' +
+                                '                            <div class="custom-card mb-3">\n' +
+                                '                                <a href="/track/' + song.audio_id + '" class="text-dark custom-card--inline">\n' +
+                                '                                    <div class="custom-card--inline-img">\n' +
+                                '                                        <img src="' + song.thumbnail + '" alt=""\n' +
+                                '                                             class="card-img--radius-sm">\n' +
+                                '                                    </div>\n' +
+                                '                                    <div class="custom-card--inline-desc">\n' +
+                                '                                        <p class="text-truncate mb-0">' + song.title + '</p>\n' +
+                                '                                        <p class="text-truncate text-muted font-sm">' + artists + '</p>\n' +
+                                '                                    </div>\n' +
+                                '                                </a>\n' +
+                                '                            </div>\n' +
+                                '                        </div>')
+                        });
+                    } else {
+                        search_track.append('<div class="col-xl-4 col-md-6 col-12"><p>Nothing found with this keyword!</p></div>')
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
 });
