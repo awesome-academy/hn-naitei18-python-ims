@@ -40,6 +40,7 @@ class Category(models.Model):
 
     def __str__(self):
         return f'{self.name_category}'
+    thumbnail = models.ImageField(upload_to="genres", default="default.jpeg")
 
 
 class Album(models.Model):
