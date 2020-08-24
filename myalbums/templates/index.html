@@ -1,4 +1,5 @@
 {% extends 'layouts/base_generic.html' %}
+{% load i18n  %}
 {% load static %}
 
 {% block content %}
@@ -16,9 +17,9 @@
                                      style="background-image: url({% static 'images/background/horizontal/1.jpg' %})">
                                     <div class="event-content p-4">
                                         <a href="#">
-                                            <h6>Dance with DJ SS</h6>
+                                            <h6>{% trans 'Dance with DJ SS' %}</h6>
                                         </a>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae consectetur, ex explicabo.</p>
+                                        <p>{% trans 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae consectetur, ex explicabo.' %}</p>
                                     </div>
                                 </div>
                             </div>
@@ -29,9 +30,9 @@
                                      style="background-image: url({% static 'images/background/horizontal/2.jpg' %})">
                                     <div class="event-content p-4">
                                         <a href="#">
-                                            <h6>Lorem ipsum</h6>
+                                            <h6>{% trans 'Lorem ipsum' %}</h6>
                                         </a>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae consectetur, ex explicabo.</p>
+                                        <p>{% trans 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae consectetur, ex explicabo.' %}</p>
                                     </div>
                                 </div>
                             </div>
@@ -43,11 +44,11 @@
                         role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="recent-tab" data-toggle="tab" href="#recent"
-                               role="tab" aria-controls="recent" aria-selected="true">Recent</a>
+                               role="tab" aria-controls="recent" aria-selected="true">{% trans 'Recent' %}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="trending-tab" data-toggle="tab" href="#trending"
-                               role="tab" aria-controls="trending" aria-selected="false">Trending</a>
+                               role="tab" aria-controls="trending" aria-selected="false">{% trans 'Trending' %}</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="songsListContent">
@@ -59,8 +60,8 @@
                                             <div class="custom-card--inline-img">
                                                 <img src="{{ song.thumbnail }}" alt="" class="card-img--radius-sm"></div>
                                             <div class="custom-card--inline-desc">
-                                                <p class="text-truncate mb-0">{{ song.title }}</p>
-                                                <p class="text-truncate text-muted font-sm">{{ song.artist }}</p>
+                                                <p class="text-truncate mb-0">{{ song.title }}' %}</p>
+                                                <p class="text-truncate text-muted font-sm">{{ song.artist }}' %}</p>
                                             </div>
                                         </div>
                                         <ul class="custom-card--labels d-flex ml-auto">
@@ -82,8 +83,8 @@
                                             <img src="#" alt="" class="card-img--radius-sm">
                                         </div>
                                         <div class="custom-card--inline-desc">
-                                            <p class="text-truncate mb-0">Mummy</p>
-                                            <p class="text-truncate text-muted font-sm">Arebica Luna</p>
+                                            <p class="text-truncate mb-0">{% trans 'Mummy' %}</p>
+                                            <p class="text-truncate text-muted font-sm">{% trans 'Arebica Luna' %}</p>
                                         </div>
                                     </div>
                                     <ul class="custom-card--labels d-flex ml-auto">
@@ -101,8 +102,8 @@
                                             <img src="#" alt="" class="card-img--radius-sm">
                                         </div>
                                         <div class="custom-card--inline-desc">
-                                            <p class="text-truncate mb-0">Deep inside</p>
-                                            <p class="text-truncate text-muted font-sm">Pimila Holliwy</p>
+                                            <p class="text-truncate mb-0">{% trans 'Deep inside' %}</p>
+                                            <p class="text-truncate text-muted font-sm">{% trans 'Pimila Holliwy' %}</p>
                                         </div>
                                     </div>
                                     <ul class="custom-card--labels d-flex ml-auto">
@@ -118,10 +119,10 @@
                 <div class="heading">
                     <div class="d-flex flex-wrap align-items-end">
                         <div class="flex-grow-1">
-                            <h4>New Releases</h4>
-                            <p>Listen recently release music</p>
+                            <h4>{% trans 'New Releases' %}</h4>
+                            <p>{% trans 'Listen recently release music' %}</p>
                         </div>
-                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">View All</a>
+                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a>
                     </div>
                     <hr>
                 </div>
@@ -173,8 +174,8 @@
                                 </a>
                             </div>
                             <a href="#" class="custom-card--link mt-2">
-                                <h6 style="overflow: hidden">{{ song.title }}</h6>
-                                <p>{{ song.artists.0.name }}</p>
+                                <h6 style="overflow: hidden">{{ song.title }}' %}</h6>
+                                <p>{% trans '{{ song.artists.0.name }}' %}</p>
                             </a>
                         </div>
                     {% endfor %}
@@ -183,9 +184,9 @@
             <div class="section">
                 <div class="heading">
                     <div class="d-flex flex-wrap align-items-end">
-                        <div class="flex-grow-1"><h4>Featured Artists</h4>
-                            <p>Select you best to listen</p></div>
-                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">View All</a></div>
+                        <div class="flex-grow-1"><h4>{% trans 'Featured Artists' %}</h4>
+                            <p>{% trans 'Select you best to listen' %}</p></div>
+                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a></div>
                     <hr>
                 </div>
                 <div class="carousel-item-6 arrow-pos-2">
@@ -197,7 +198,7 @@
                                 </a>
                             </div>
                             <a href="#" class="custom-card--link mt-2">
-                                <h6 class="mb-0">{{ artist.name }}</h6>
+                                <h6 class="mb-0">{{ artist.name }}' %}</h6>
                             </a>
                         </div>
                     {% endfor %}
@@ -206,9 +207,11 @@
             <div class="section">
                 <div class="heading">
                     <div class="d-flex flex-wrap align-items-end">
-                        <div class="flex-grow-1"><h4>Categories</h4>
-                            <p>Select you category</p></div>
-                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">View All</a></div>
+
+                        <div class="flex-grow-1"><h4>{% trans 'Category' %}</h4>
+                            <p>{% trans 'Select you genre' %}</p></div>
+
+                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a></div>
                     <hr>
                 </div>
                 <div class="carousel-item-6 arrow-pos-1">
