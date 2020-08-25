@@ -24,7 +24,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'category' %}" class="nav-link">
                     <i class="la la-diamond"></i>
                     <span>{% trans 'Category' %}</span>
                 </a>
@@ -36,7 +36,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'artist' %}" class="nav-link">
                     <i class="la la-microphone"></i>
                     <span>{% trans 'Artists' %}</span>
                 </a>
@@ -47,7 +47,7 @@
                     <span>{% trans 'Stations' %}</span>
                 </a>
             </li>
-            {% if request.user.is_authenticated %}
+            {% if user.is_authenticated %}
                 <li class="nav-item nav-header">{% trans 'Your Music' %}</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
