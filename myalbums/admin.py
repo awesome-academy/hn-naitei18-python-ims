@@ -46,4 +46,4 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('user_name', 'email', 'password')
+    list_display = ('username', 'email', 'password')

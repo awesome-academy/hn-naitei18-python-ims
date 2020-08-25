@@ -1,0 +1,81 @@
+{% extends '../layouts/base_generic.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <main id="pageWrapper">
+        <div class="banner bg-song"></div>
+        <div class="main-container">
+            <div class="row section text-center text-md-left">
+                <div class="col-xl-3 col-lg-4 col-sm-5">
+                    <img src="{{ song.thumbnail.url }}" alt="" class="card-img--radius-lg">
+                </div>
+                <div class="col-xl-9 col-lg-8 col-sm-7">
+                    <div class="row pt-4">
+                        <div class="col-xl-8 col-lg-6">
+                            <h5>{{ song.title }}</h5>
+                            <p>{{ song.artists.0.name }}</p>
+                            <!-- song.artist.all|join:"," }} -->
+                            <div class="text-warning stars">
+                                <i class="la la-star"></i>
+                                <i class="la la-star"></i>
+                                <i class="la la-star"></i>
+                                <i class="la la-star"></i>
+                                <i class="la la-star-half-empty"></i>
+                            </div>
+                            {% if song.type == 'free' %}
+                                <span class="badge badge-pill badge-primary mt-3">Free</span>
+                            {% else %}
+                                <span class="badge badge-pill badge-warning mt-3">Premium</span>
+                            {% endif %}
+                            <div class="mt-4">
+                                <a href="javascript:void(0);"
+                                   class="btn btn-pill btn-air btn-bold btn-danger"
+                                   id="play-pause"
+                                   data-audio='{"name": "{{ song.title }}", "artist": "{{ song.artists.0.name }}", "album": "", "url": "{{ song.song.url }}", "cover_art_url": "{{ song.thumbnail.url }}"}'>
+                                    Play
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="pt-3 pt-lg-0 text-lg-right">
+                               
+                                <button class="btn btn-pill btn-air btn-danger btn-icon-only" id="btn-favorite" data-decision="{{ favorited }}" data-url="#" data-song-id="{{ song.id }}" data-user="{{ request.user }}">
+                                    {% if favorited == 'remove' and request.user.is_authenticated %}
+                                        <i class="la la-heart"></i>
+                                    {% else %}
+                                        <i class="la la-heart-o"></i>
+                                    {% endif %}
+                                </button>
+                                <button class="btn btn-pill btn-air btn-warning btn-icon-only" id="btn-playlist">
+                                    <i class="la la-plus"></i>
+                                </button>
+                                <a class="btn btn-pill btn-air btn-success btn-icon-only" href="#">
+                                    <i class="la la-download" style="margin-top: 10px; color: #fff"></i>
+                                </a>
+                                <button class="btn btn-pill btn-air btn-brand btn-icon-only" data-toggle="modal" data-target="#shareModal">
+                                    <i class="la la-share-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div id="waveform-load"></div>
+                <div id="waveform"></div>
+            </div>
+        </div>
+        {% include 'includes/footer.html' %}
+    </main>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/amplitudejs@5.0.2/dist/amplitude.min.js"></script>
+    <script src="{% static 'js/wavesurfer.min.js' %}"></script>
+    <script src="{% static 'js/song_js.js' %}"></script>
+   
+{% endblock %}

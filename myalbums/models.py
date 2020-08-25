@@ -7,6 +7,7 @@ import numpy as np
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from time import strftime, gmtime
 
 
 class MyModelName(models.Model):
@@ -72,6 +73,12 @@ class Song(models.Model):
     album = models.ManyToManyField(
         'Album', help_text='Select album for this song')
     hot = models.BooleanField(default=False)
+    thumbnail = models.ImageField(upload_to="thumbnails", blank=False,default="default.jpeg")
+    playtime = models.CharField(max_length=10, default="0.00")
+
+    @property
+    def duration(self):
+        return str(strftime('%H:%M:%S', gmtime(float(self.playtime))))
 
     def __str__(self):
         return self.title
@@ -90,7 +97,8 @@ class Song(models.Model):
 class Artist(models.Model):
     name_artist = models.CharField(max_length=50)
     birthday = models.DateField(null=True, blank=True)
-
+    biography = models.CharField(max_length=400, null=True, help_text=(
+        'Enter your biography '))
     def get_absolute_url(self):
         return reverse('artist-detail', args=[str(self.id)])
 
@@ -141,7 +149,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    user_name = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
     password = models.CharField(None, max_length=128)
 
     email = models.EmailField(
