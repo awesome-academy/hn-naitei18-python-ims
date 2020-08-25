@@ -2,7 +2,7 @@ from django.contrib import admin
 import numpy as np
 
 # Register your models here.
-from .models import Song, Artist, Category, Album, Review, User
+from .models import Song, Artist, Category, Album, Review, User, Profile
 
 
 @admin.register(Song)
@@ -46,4 +46,8 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'password')
+
+    list_display = ('user_name', 'email', 'password')
+
+admin.site.register(Profile)
+
