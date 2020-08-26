@@ -1,12 +1,15 @@
+
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, DeleteView, ListView
 from .models import *
 # from utils.song_utils import generate_key
-# from .forms import *
+from .forms import UserUpdateForm, ProfileUpdateForm
 from tinytag import TinyTag
 
 def index(request):
@@ -26,6 +29,26 @@ class SongDetailView(DetailView):
 
 class ArtistListView(ListView):
     model = Artist
+
+@login_required
+def profile (request):
+    if request.method == 'POST':
+       u_form = UserUpdateForm(request.POST, instance=request.user)
+       p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+       if u_form.is_valid() and p_form.is_valid():
+           u_form.save()
+           p_form.save()
+           messages.success(request, f'Successful!!')
+           return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context  = {
+         'u_form' : u_form,
+         'p_form' : p_form
+     }
+    return render(request, 'registration/profile.html', context)
 
 class ArtistDetailView(DetailView):
     model = Artist
