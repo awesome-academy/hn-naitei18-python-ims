@@ -37,6 +37,7 @@ class MyModelName(models.Model):
 class Category(models.Model):
     name_category = models.CharField(max_length=20, null=True, help_text=(
         'Enter a song category (e.g. Sad love)'))
+    thumbnail = models.ImageField(upload_to="thumbnails", blank=False, default="default.jpeg")
 
     def get_absolute_url(self):
         return reverse('category-detail', args=[str(self.id)])
@@ -77,6 +78,7 @@ class Song(models.Model):
     hot = models.BooleanField(default=False)
     thumbnail = models.ImageField(upload_to="thumbnails", blank=False,default="default.jpeg")
     playtime = models.CharField(max_length=10, default="0.00")
+    song= models.FileField(upload_to="song_directory_path", default="default.mp3")
 
     @property
     def duration(self):
@@ -101,6 +103,7 @@ class Artist(models.Model):
     birthday = models.DateField(null=True, blank=True)
     biography = models.CharField(max_length=400, null=True, help_text=(
         'Enter your biography '))
+    thumbnail = models.ImageField(upload_to="thumbnails", blank=False, default="default.jpeg")
     def get_absolute_url(self):
         return reverse('artist-detail', args=[str(self.id)])
 
@@ -165,7 +168,7 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = []  # Email & Password are required by default.
 
     def __str__(self):
-        return self.user_name
+        return self.username
 
     def get_full_name(self):
         # The user is identified by their email address
@@ -260,7 +263,7 @@ class Profile (models.Model):
     image = models.ImageField(default='images/users/avatar.jpg',upload_to='profile_pics')
 
     def __str__(self):
-        return f'{self.user.user_name}Profile'
+        return f'{self.user.username}Profile'
     def save(self):
         super().save()
         img = Image.open(self.image.path)

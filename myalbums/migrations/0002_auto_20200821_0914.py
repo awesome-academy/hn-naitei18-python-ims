@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='user',
-            name='user_name',
+            name='username',
             field=models.CharField(max_length=20),
         ),
     ]

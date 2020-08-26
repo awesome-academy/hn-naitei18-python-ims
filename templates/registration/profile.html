@@ -46,7 +46,7 @@
                                                 <div class="form-row form-group">
                                                  <label for="userName" class="col-md-4 text-md-right col-form-label"> User Name </label>
                                                 <div class="col-md-7">
-                                                      {{ user.user_name}}
+                                                      {{ user.username}}
                                                   </div>
                                                 </div>
                                                 <div class="form-row form-group">
@@ -61,7 +61,7 @@
                                          {% csrf_token %}
                                          <fieldset class="form-group">
                                              <legend class="border-bottom mb-4">Profile Update</legend>
-                                             <li class="mb-3">User Name:{{ u_form.user_name }}</li>
+                                             <li class="mb-3">User Name:{{ u_form.username }}</li>
                                              <li class="mb-3">Email:{{ u_form.email }}</li>
                                              <li class="mb-3">Avatar:{{ p_form }}</li>
                                          </fieldset>
