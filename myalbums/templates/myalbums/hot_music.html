@@ -7,24 +7,15 @@
     <main id="pageWrapper">
         <div class="banner bg-song"></div>
         <div class="main-container">
-            <div class="row align-items-end">
-                <div class="col-6 ml-auto">
-                    <form action="#" class="form-inline justify-content-end">
-                        <label class="mr-2" for="filter2">Sorted By:</label>
-                        <select class="custom-select mr-sm-2" id="filter2">
-                            <option selected="selected">Popular</option>
-                            <option value="1">A-Z</option>
-                            <option value="2">Z-A</option>
-                        </select>
-                    </form>
+                <div class="col-6 ml-2">
+                    <h1>Hot Music</h1>
                 </div>
                 <div class="col-12">
                     <hr>
                 </div>
-            </div>
-            <div class="row section">
-                {% if category.song_set.all.count > 0 %}
-                    {% for song in category.song_set.all %}
+                <div class="row section">
+                    {% for song in songs %}
+                        {% if song.hot is True %}
                         <div class="col-xl-3 col-lg-4 col-sm-6 pb-4">
                             <div class="custom-card">
                                 <div class="custom-card--img">
@@ -58,8 +49,8 @@
                                         </div>
                                     </div>
                                     <a href="{{ song.get_absolute_url }}">
-                                        <img src="{{ song.thumbnail.url }}"
-                                             
+                                        <img src="{{ song.thumbnail.url}}"
+
                                              style="width: 250px; height: 250px"
                                              class="card-img--radius-lg">
                                     </a>
@@ -71,11 +62,8 @@
                                 </a>
                             </div>
                         </div>
+                        {% endif %}
                     {% endfor %}
-                {% else %}
-                    <h3>No song found with this genre!</h3>
-                {% endif %}
-
             </div>
         </div>
         {% include 'includes/footer.html' %}

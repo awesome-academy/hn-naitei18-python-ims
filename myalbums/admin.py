@@ -17,7 +17,7 @@ class SongAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    fields = ['name_category']
+    fields = ['name_category','thumbnail']
 #     inlines = [SongInline]
 
 
@@ -30,7 +30,7 @@ class AlbumAdmin(admin.ModelAdmin):
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
     #     list_display = ('name_artist', 'birthday')
-    fields = ['name_artist']
+    fields = ['name_artist','birthday','thumbnail']
 
 # @admin.register(Favourite)
 # @admin.register(Follower)
@@ -47,7 +47,7 @@ class ReviewAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
 
-    list_display = ('user_name', 'email', 'password')
+    list_display = ('username', 'email', 'password')
 
 admin.site.register(Profile)
 

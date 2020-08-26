@@ -8,13 +8,13 @@
         <div class="main-container">
             <div class="row section text-center text-md-left">
                 <div class="col-xl-3 col-lg-4 col-sm-5">
-                    <img src="{% static 'images/artists/default.jpg' %}" alt="" class="card-img--radius-lg" style="filter: blur(4px) brightness(.9)">
+                    <img src="{{ artist.thumbnail.url }}" alt="" class="card-img--radius-lg" style=" width:280px; height: 280px">
                 </div>
                 <div class="col-xl-9 col-lg-8 col-sm-7">
                     <div class="row pt-4">
                         <div class="col-xl-8 col-lg-6">
                             <h5>{{ artist.name_artist }}</h5>
-                            <p>DOB: --</p>
+                            <p>Debut: {{ artist.birthday }}</p>
                             <div class="text-warning stars"><i class="la la-star"></i> <i class="la la-star"></i> <i class="la la-star"></i> <i class="la la-star"></i> <i class="la la-star-half-empty"></i></div>
                             <div class="mt-4"><a href="javascript:void(0);" class="btn btn-pill btn-air btn-bold btn-danger">Play All</a></div>
                         </div>
