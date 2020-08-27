@@ -9,7 +9,7 @@ from django.contrib.auth.models import (
 )
 from time import strftime, gmtime
 from PIL import Image
-
+from django.db.models.signals import post_save
 
 
 class MyModelName(models.Model):
@@ -78,7 +78,6 @@ class Song(models.Model):
     hot = models.BooleanField(default=False)
     thumbnail = models.ImageField(upload_to="thumbnails", blank=False,default="default.jpeg")
     playtime = models.CharField(max_length=10, default="0.00")
-    song= models.FileField(upload_to="song_directory_path", default="default.mp3")
 
     @property
     def duration(self):
@@ -103,7 +102,6 @@ class Artist(models.Model):
     birthday = models.DateField(null=True, blank=True)
     biography = models.CharField(max_length=400, null=True, help_text=(
         'Enter your biography '))
-    thumbnail = models.ImageField(upload_to="thumbnails", blank=False, default="default.jpeg")
     def get_absolute_url(self):
         return reverse('artist-detail', args=[str(self.id)])
 
@@ -260,14 +258,24 @@ class Favourite(models.Model):
 
 class Profile (models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='images/users/avatar.jpg',upload_to='profile_pics')
+    image = models.ImageField(default='avatar.jpg',upload_to='profile_pics')
 
     def __str__(self):
         return f'{self.user.username}Profile'
-    def save(self):
-        super().save()
+
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
+
         img = Image.open(self.image.path)
-        if img.height > 300  or img.width > 300:
-             output_size = (300,300)
-             img.thumbnail(output_size)
-             img.save(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
+
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+post_save.connect(create_user_profile, sender=User)

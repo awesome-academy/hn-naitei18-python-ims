@@ -9,7 +9,11 @@
         <div class="main-container">
             <div class="row section text-center text-md-left">
                 <div class="col-xl-3 col-lg-4 col-sm-5">
+                    {% if song.thumbnail.url %}
                     <img src="{{ song.thumbnail.url }}" alt="" class="card-img--radius-lg">
+                    {% else%}
+                    <img src="{% static 'images/genre/default.jpeg' %}" alt="" class="card-img--radius-lg">
+                    {% endif %}
                 </div>
                 <div class="col-xl-9 col-lg-8 col-sm-7">
                     <div class="row pt-4">

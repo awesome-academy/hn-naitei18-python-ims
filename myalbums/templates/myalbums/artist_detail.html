@@ -8,13 +8,13 @@
         <div class="main-container">
             <div class="row section text-center text-md-left">
                 <div class="col-xl-3 col-lg-4 col-sm-5">
-                    <img src="{{ artist.thumbnail.url }}" alt="" class="card-img--radius-lg" style=" width:280px; height: 280px">
+                    <img src="{% static 'images/artists/default.jpg' %}" alt="" class="card-img--radius-lg" style="filter: blur(4px) brightness(.9)">
                 </div>
                 <div class="col-xl-9 col-lg-8 col-sm-7">
                     <div class="row pt-4">
                         <div class="col-xl-8 col-lg-6">
                             <h5>{{ artist.name_artist }}</h5>
-                            <p>Debut: {{ artist.birthday }}</p>
+                            <p>DOB: --</p>
                             <div class="text-warning stars"><i class="la la-star"></i> <i class="la la-star"></i> <i class="la la-star"></i> <i class="la la-star"></i> <i class="la la-star-half-empty"></i></div>
                             <div class="mt-4"><a href="javascript:void(0);" class="btn btn-pill btn-air btn-bold btn-danger">Play All</a></div>
                         </div>
@@ -53,7 +53,7 @@
                             {% for song in artist.song_set.all %}
                                 <div class="custom-list--item">
                                     <div class="text-dark custom-card--inline">
-                                        
+
                                             <div class="custom-card--inline-img">
                                                 <img src="{{ song.thumbnail.url }}" alt="" class="card-img--radius-sm">
                                             </div>
@@ -62,7 +62,7 @@
                                                     <p class="text-truncate mb-0">{{ song.title }}</p>
                                                  </a>
                                             </div>
-                                       
+
                                     </div>
                                     <ul class="custom-card--labels d-flex ml-auto">
                                         <li>{{ song.duration }}</li>

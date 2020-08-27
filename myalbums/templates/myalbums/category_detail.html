@@ -58,10 +58,17 @@
                                         </div>
                                     </div>
                                     <a href="{{ song.get_absolute_url }}">
-                                        <img src="{{ song.thumbnail.url }}"
-                                             
-                                             style="width: 250px; height: 250px"
-                                             class="card-img--radius-lg">
+                                        {% if song.thumnail.url %}
+                                            <img src="{{song.thumnail.url}}"
+
+                                                style="width: 350px; height: 210px"
+                                                class="card-img--radius-lg">
+                                        {% else %}
+                                            <img src="{% static 'images/genre/default.jpeg' %}"
+
+                                                style="width: 350px; height: 210px"
+                                                class="card-img--radius-lg">
+                                            {% endif %}
                                     </a>
                                 </div>
                                 <a href="{{ song.get_absolute_url }}" class="custom-card--link mt-2">
