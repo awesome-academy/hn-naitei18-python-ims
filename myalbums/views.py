@@ -5,22 +5,20 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, DeleteView, ListView
-from .models import *
+from .models import Song, Artist, Category, Album, Review, User, Profile
 # from utils.song_utils import generate_key
 from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import RegisterForm
 from tinytag import TinyTag
-
-def home(request):
-    context = {
-        'songs': Song.objects.all(),
-        # 'genres': Genre.objects.all()[:6],
-        # 'latest_songs': Song.objects.all()[:6]
-    }
-    return render(request, "index.html", context)
-
+from django.http import  HttpResponseRedirect
 
 def index(request):
-    return render(request, 'index.html')
+    context = {
+        'artists' : Artist.objects.all(),
+        'genres': Category.objects.all()[:6],
+        'latest_songs': Song.objects.all()[:6]
+    }  
+    return render(request, "index.html", context)
 
 
 class CategoryListView(ListView):
@@ -72,3 +70,22 @@ class HotSongListView(ListView):
     model = Song
     template_name = 'myalbums/hot_music.html'
     context_object_name = 'songs'
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        data = {'username':username,'email': email, 'password1': password1, 'password1': password2}
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(password1)
+            form.save()
+            return redirect('index') 
+    else:
+        form = RegisterForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+

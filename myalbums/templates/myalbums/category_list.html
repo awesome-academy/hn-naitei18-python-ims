@@ -4,15 +4,18 @@
 {% block content %}
 
     <main id="pageWrapper">
+
         <div class="banner bg-song"></div>
         <div class="main-container">
+            <h1>Category</h1>
             <div class="section row">
-                {% for category in category_list  %}
+
+                {% for category in category_list %}
                     <div class="col-xl-3 col-lg-4 col-sm-6 pb-4">
                         <div class="custom-card">
-                            <div class="custom-card--img">
+                            <div class="custom-card--img" style="margin-bottom: 70px;">
                                 <a href="{{ category.get_absolute_url }}">
-                                    <img src="{{ category.thumbnail.url }}" alt="Artist" class="card-img--radius-md" style="width:280px; height: 280px">
+                                    <span class="bg-blur card-img--radius-md">{{ category.name_category }}</span>
                                 </a>
                             </div>
                         </div>

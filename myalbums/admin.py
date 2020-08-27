@@ -1,7 +1,8 @@
 from django.contrib import admin
 import numpy as np
-
-# Register your models here.
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .forms import UserAdminCreationForm, UserAdminChangeForm
 from .models import Song, Artist, Category, Album, Review, User, Profile
 
 
@@ -30,7 +31,7 @@ class AlbumAdmin(admin.ModelAdmin):
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
     #     list_display = ('name_artist', 'birthday')
-    fields = ['name_artist','birthday','thumbnail']
+    fields = ['name_artist']
 
 # @admin.register(Favourite)
 # @admin.register(Follower)
@@ -44,10 +45,38 @@ class ReviewAdmin(admin.ModelAdmin):
                     'content_review', 'date_review', 'rating')
 
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-
-    list_display = ('username', 'email', 'password')
-
 admin.site.register(Profile)
 
+class UserAdmin(BaseUserAdmin):
+    # The forms to add and change user instances
+    form = UserAdminChangeForm
+    add_form = UserAdminCreationForm
+
+    # The fields to be used in displaying the User model.
+    # These override the definitions on the base UserAdmin
+    # that reference specific fields on auth.User.
+    list_display = ('email', 'admin','username')
+    list_filter = ('admin',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password','username')}),
+        ('Permissions', {'fields': ('admin','staff','active')}),
+    )
+    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
+    # overrides get_fieldsets to use this attribute when creating a user.
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2')}
+        ),
+    )
+    search_fields = ('email',)
+    ordering = ('email',)
+    filter_horizontal = ()
+
+
+admin.site.register(User, UserAdmin)
+
+
+
+# Remove Group Model from admin. We're not using it.
+admin.site.unregister(Group)

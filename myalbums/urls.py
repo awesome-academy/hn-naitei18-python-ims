@@ -1,10 +1,7 @@
 
 from django.urls import path, include
-
-from . import views
 from .views import *
 from django.conf import settings
-from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -15,8 +12,7 @@ urlpatterns = [
 	path('song/<int:pk>', SongDetailView.as_view(), name='song-detail'),
 	path('artist/', ArtistListView.as_view(), name='artist'),
 	path('artist/<int:pk>', ArtistDetailView.as_view(), name='artist-detail'),
-	path('profile',views.profile, name ='profile'),
+	path('profile',profile, name ='profile'),
     path('hotsong/', HotSongListView.as_view(), name='hot-song'),
+	path('register/', register, name='register'),
 ]
-if settings.DEBUG:
-  urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

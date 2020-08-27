@@ -58,10 +58,10 @@
                                     <div class="custom-list--item">
                                         <div class="text-dark custom-card--inline">
                                             <div class="custom-card--inline-img">
-                                                <img src="{{ song.thumbnail }}" alt="" class="card-img--radius-sm"></div>
+                                                <img src="{{ song.thumbnail.url }}" alt="" class="card-img--radius-sm"></div>
                                             <div class="custom-card--inline-desc">
-                                                <p class="text-truncate mb-0">{{ song.title }}' %}</p>
-                                                <p class="text-truncate text-muted font-sm">{{ song.artist }}' %}</p>
+                                                <p class="text-truncate mb-0">{{ song.title }}</p>
+                                                <p class="text-truncate text-muted font-sm">{{ song.artist.all|join:',' }}</p>
                                             </div>
                                         </div>
                                         <ul class="custom-card--labels d-flex ml-auto">
@@ -122,7 +122,7 @@
                             <h4>{% trans 'New Releases' %}</h4>
                             <p>{% trans 'Listen recently release music' %}</p>
                         </div>
-                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a>
+                        <a href="{% url 'song'%}" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a>
                     </div>
                     <hr>
                 </div>
@@ -167,15 +167,15 @@
                                     </div>
                                 </div>
                                 <a href="javascript:void(0);"
-                                   data-audio='{"name": "{{ song.title }}", "artist": "Arebica Luna", "album": "Mummy", "url": "{{ song.song.url }}", "cover_art_url": "{{ song.thumbnail.url }}"}'>
+                                   >
                                     <img src="{{ song.thumbnail.url }}" alt=""
                                          style="height: 180px; width: 290px"
                                          class="card-img--radius-lg">
                                 </a>
                             </div>
                             <a href="#" class="custom-card--link mt-2">
-                                <h6 style="overflow: hidden">{{ song.title }}' %}</h6>
-                                <p>{% trans '{{ song.artists.0.name }}' %}</p>
+                                <h6 style="overflow: hidden">{{ song.title }}</h6>
+                                <p>{{ song.artist.all|join:',' }}</p>
                             </a>
                         </div>
                     {% endfor %}
@@ -186,23 +186,26 @@
                     <div class="d-flex flex-wrap align-items-end">
                         <div class="flex-grow-1"><h4>{% trans 'Featured Artists' %}</h4>
                             <p>{% trans 'Select you best to listen' %}</p></div>
-                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a></div>
+                        <a href="{% url 'artist' %}" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a></div>
                     <hr>
                 </div>
-                <div class="carousel-item-6 arrow-pos-2">
-                    {% for artist in artists %}
-                        <div class="custom-card">
-                            <div class="custom-card--img">
-                                <a href="#">
-                                    <img src="{% static 'images/cover/large/2.jpg' %}" alt="Arebica Luna" class="card-img--radius-lg">
-                                </a>
-                            </div>
-                            <a href="#" class="custom-card--link mt-2">
-                                <h6 class="mb-0">{{ artist.name }}' %}</h6>
-                            </a>
+
+                        <div class="section row"  >
+                            
+                            {% for artist in artists %}
+                                <div class="col-xl-3 col-lg-4 col-sm-6 pb-4">
+                                    <div class="custom-card">
+                                        <div class="custom-card--img">
+                                            <a href="#">
+                                                <img src="{% static 'images/artists/default.jpg' %}" alt="Artist" class="card-img--radius-md" style="filter: blur(4px)">
+                                                <span class="bg-blur">{{ artist.name_artist }}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
-                </div>
+
             </div>
             <div class="section">
                 <div class="heading">
@@ -211,21 +214,23 @@
                         <div class="flex-grow-1"><h4>{% trans 'Category' %}</h4>
                             <p>{% trans 'Select you genre' %}</p></div>
 
-                        <a href="#" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a></div>
+                        <a href="{% url 'category' %}" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'View All' %}</a></div>
                     <hr>
                 </div>
-                <div class="carousel-item-6 arrow-pos-1">
-                    {% for genre in genres %}
+                <div class=" arrow-pos-1">
+                    <div class="section row" >
+                    {% for category in genres %}
+                    <div class="col-xl-3 col-lg-4 col-sm-6 pb-4">
                         <div class="custom-card">
-                            <div class="custom-card--img">
-                                <a href="#">
-                                    <img src="{{ genre.thumbnail.url }}" alt="Remix Songs"
-                                         class="card-img--radius-md">
-                                    <span class="bg-blur">{{ genre.name }}</span>
+                            <div class="custom-card--img" style="margin-bottom: 70px;">
+                                <a href="{{ category.get_absolute_url }}">
+                                    <span class="bg-blur card-img--radius-md">{{ category.name_category }}</span>
                                 </a>
                             </div>
                         </div>
-                    {% endfor %}
+                    </div>
+                {% endfor %}
+                 </div>
                 </div>
             </div>
         </div>

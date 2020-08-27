@@ -11,16 +11,60 @@
             <div class="section row">
 
                 {% for song in song_list %}
-                    <div class="col-xl-3 col-lg-4 col-sm-6 pb-4">
-                        <div class="custom-card">
-                            <div class="custom-card--img" style="margin-bottom: 70px;">
-                                <a href="{{ song.get_absolute_url }}">
-                                    <span class="bg-blur card-img--radius-md">{{ song.title }}</span>
-                                </a>
+                <div class="col-xl-3 col-lg-4 col-sm-6 pb-4">
+                    <div class="custom-card">
+                        <div class="custom-card--img">
+                            <div class="custom-card--info">
+                                <div class="dropdown dropdown-icon">
+                                    <a href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="ion-md-more"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li class="dropdown-item">
+                                            <a href="javascript:void(0);" class="dropdown-link favorite">
+                                                <i class="la la-heart-o"></i>
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="javascript:void(0);" class="dropdown-link">
+                                                <i class="la la-plus"></i>
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="javascript:void(0);" class="dropdown-link">
+                                                <i class="la la-download"></i>
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="javascript:void(0);" class="dropdown-link">
+                                                <i class="la la-share-alt"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+                            <a href="{{ song.get_absolute_url }}">
+                                {% if song.thumbnail.url %}
+                                    <img src="{{song.thumbnail.url}}"
+
+                                        style="width: 350px; height: 210px"
+                                        class="card-img--radius-lg">
+                                {% else %}
+                                    <img src="{% static 'images/genre/default.jpeg' %}"
+
+                                        style="width: 350px; height: 210px"
+                                        class="card-img--radius-lg">
+                                    {% endif %}
+                            </a>
                         </div>
+                        <a href="{{ song.get_absolute_url }}" class="custom-card--link mt-2">
+                            <h6>{{ song.title }}</h6>
+                            <p>{{ song.artist.all|join:"," }}</p>
+                            <!-- <p>{{ song.album.all|join:"," }}</p> -->
+                        </a>
                     </div>
-                {% endfor %}
+                </div>
+            {% endfor %}
             </div>
         </div>
         {% include 'includes/footer.html' %}
