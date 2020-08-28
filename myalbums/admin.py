@@ -1,9 +1,10 @@
 from django.contrib import admin
 import numpy as np
+
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminCreationForm, UserAdminChangeForm
-from .models import Song, Artist, Category, Album, Review, User, Profile
+from .models import Song, Artist, Category, Album, Review, User, Profile, Follow
 
 
 @admin.register(Song)
@@ -45,7 +46,13 @@ class ReviewAdmin(admin.ModelAdmin):
                     'content_review', 'date_review', 'rating')
 
 
-admin.site.register(Profile)
+# admin.site.register(Profile)
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+
+    list_display = ('id','user')
+
+admin.site.register(Follow)
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
