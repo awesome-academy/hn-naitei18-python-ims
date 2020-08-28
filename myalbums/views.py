@@ -88,4 +88,13 @@ def register(request):
         form = RegisterForm()
     return render(request, 'registration/register.html', {'form': form})
 
-
+class SearchSongListView(ListView):
+    # template_name = 'myalbums/song_detail.html'
+    model = Song
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query :
+            return  Song.objects.filter(title__icontains=query)
+        else :
+            return  Song.objects.all()
+       

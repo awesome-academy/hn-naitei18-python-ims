@@ -15,4 +15,5 @@ urlpatterns = [
 	path('profile',profile, name ='profile'),
     path('hotsong/', HotSongListView.as_view(), name='hot-song'),
 	path('register/', register, name='register'),
+	path('search-song/', SearchSongListView.as_view(), name='search'),
 ]
