@@ -7,9 +7,9 @@
 
         <div class="banner bg-song"></div>
         <div class="main-container">
-            <h1>song</h1>
+            <h1>song</h1><br><br>
             <div class="section row">
-
+            {% if song_list %}
                 {% for song in song_list %}
                 <div class="col-xl-3 col-lg-4 col-sm-6 pb-4">
                     <div class="custom-card">
@@ -64,7 +64,10 @@
                         </a>
                     </div>
                 </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <h4>no songs</h4>
+            {% endif %}
             </div>
         </div>
         {% include 'includes/footer.html' %}

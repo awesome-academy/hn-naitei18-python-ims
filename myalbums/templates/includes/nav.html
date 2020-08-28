@@ -1,5 +1,13 @@
 {% load static %}
 {% load i18n %}
+{% block stylesheets %}
+{% endblock %}
+<!-- <script>
+    // Material Select Initialization
+    $(document).ready(function() {
+    $('.mdb-select').materialSelect();
+}); -->
+</script>
 <header id="header" class="bg-primary">
     <div class="d-flex align-items-center">
         <button type="button" class="btn toggle-menu mr-3" id="openSidebar">
@@ -7,18 +15,14 @@
             <span></span>
             <span></span>
         </button>
-        <form action="#" id="searchForm">
+        <form action="{% url 'search' %}" id="searchForm" method="get">
             <button type="button" class="btn ion-ios-search"></button>
-            <input type="text" placeholder="Search..." class="form-control" id="search" data-search-url="#">
+            <input type="text" placeholder="Search song ..." class="form-control" id="search" name="search" data-search-url="../myalbums/search.html">
             <div class="search-card" data-scrollable="true">
                 <div class="mb-3">
                     <div class="d-flex">
-                        <span class="text-uppercase mr-auto font-weight-bold text-dark">{% trans 'Track' %}</span>
-                        <a href="#">{% trans 'View All' %}</a>
-                    </div>
-                    <hr>
-                    <div class="row" id="search-track">
-
+                        <span class=" text-uppercase mr-auto font-weight-bold text-dark">{% trans 'Track' %}</span>
+                        <a href="{% url 'song' %}">{% trans 'View All' %}</a>
                     </div>
                 </div>
             </div>
