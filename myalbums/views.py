@@ -141,3 +141,47 @@ def follow(request, pk):
 
         url = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(url)
+
+@login_required()
+def favorite(request, pk):
+    if request.method == 'GET':
+        user = request.user
+        favorite = get_object_or_404(Song, pk=pk)
+        is_favorite = 0
+
+        try:
+            favorited = Favorite.objects.get(user_favorite = user, song_favorite = favorite)
+            if favorited:
+                is_favorite= 1
+        except:
+            pass
+
+        context = {
+            'user': user,
+            'favorite': favorite,
+            'is_favorite': is_favorite,
+        }
+        return render(request, 'myalbums/song_detail.html', context=context)
+    elif request.method == 'POST':
+        user = request.user
+        favorite = get_object_or_404(Song, pk=pk)
+
+        try:
+            favorited = Favorite.objects.get(user_favorite = user, song_favorite = favorite)
+            if favorited:
+                favorited.delete()
+        except:
+            favorited = Favorite(user_favorite = user, song_favorite = favorite)
+            favorited.save()
+
+        url = request.META.get('HTTP_REFERER')
+        return HttpResponseRedirect(url)
+
+class FavoriteListView(ListView):
+    model = Song
+    template_name = 'myalbums/favorite.html'
+
+
+
+
+

@@ -50,7 +50,7 @@
             {% if user.is_authenticated %}
                 <li class="nav-item nav-header">{% trans 'Your Music' %}</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{% url 'favorite' %}" class="nav-link">
                         <i class="la la-heart-o"></i>
                         <span>{% trans 'Favorites' %}</span>
                     </a>
