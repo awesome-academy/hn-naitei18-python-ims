@@ -4,12 +4,12 @@ import numpy as np
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminCreationForm, UserAdminChangeForm
-from .models import Song, Artist, Category, Album, Review, User, Profile, Follow, Favorite
+from .models import Song, Artist, Category, Album, Review, User, Profile, Follow, Favorite, Lyric
 
 
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
-    list_display = ('id','title', 'category', 'hot')
+    list_display = ('id','title', 'category', 'song', 'hot')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -82,7 +82,6 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(User, UserAdmin)
 
-
-
+admin.site.register(Lyric)
 # Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)

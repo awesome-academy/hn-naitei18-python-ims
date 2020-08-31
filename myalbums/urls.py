@@ -12,6 +12,7 @@ urlpatterns = [
 	path('category/<int:pk>', CategoryDetailView.as_view(), name='category-detail'),
 	path('song/', SongListView.as_view(), name='song'),
 	path('song/<int:pk>', views.favorite, name='song-detail'),
+    path('song/<int:pk>/lyric/', views.addlyric, name='lyric'),
 	path('artist/', ArtistListView.as_view(), name='artist'),
 	path('artist/<int:pk>', ArtistDetailView.as_view(), name='artist-detail'),
 	path('profile', views.profile, name ='profile'),
