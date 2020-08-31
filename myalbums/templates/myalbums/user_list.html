@@ -27,7 +27,7 @@
                         <div class="col-xl-2 col-lg-9 col-sm-6"><h5>Following</h5>
                             <p>{{ user.get_followings }}</p></div>
                         <div class="col-xl-2 col-lg-9 col-sm-6"><h5>Favorite Songs</h5>
-                            <p>5</p></div>
+                            <p>{{ user.user_favorite.count }}</p></div>
                             <a href="{{ user.profile.get_absolute_url }}" class="btn btn-sm btn-pill btn-air btn-primary">{% trans 'Profile' %}</a></div>
                     <hr>
                 </div>

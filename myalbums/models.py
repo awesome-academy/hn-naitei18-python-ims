@@ -99,6 +99,7 @@ class Song(models.Model):
         return np.mean(all_ratings)
 
 
+
 class Artist(models.Model):
     name_artist = models.CharField(max_length=50)
     birthday = models.DateField(null=True, blank=True)
@@ -226,6 +227,13 @@ class User(AbstractBaseUser):
             users.append(User.objects.get(email=following.following))
         return users
 
+    def list_favorite(self):
+         user_favorite = Favorite.objects.filter(user_favorite=self)
+         songs = list()
+         for song in user_favorite:
+            songs.append(Song.objects.get(title=song.song_favorite))
+         return songs
+
 
 class Comment(models.Model):
     review = models.ForeignKey(
@@ -267,14 +275,16 @@ class Follow(models.Model):
     def __unicode__(self):
         return u'%s follows %s' % (self.follower, self.following)
 
-class Favourite(models.Model):
-    favourite_name = models.CharField(max_length=50)
-    user_favourite = models.ForeignKey('User', on_delete=models.CASCADE)
-    song_favourite = models.ManyToManyField(
-        'Song', help_text='Select song for this favourite')
+class Favorite(models.Model):
+    favorite_name = models.CharField(max_length=50)
+    user_favorite = models.ForeignKey('User',related_name='user_favorite', on_delete=models.CASCADE)
+    song_favorite = models.ForeignKey('Song', related_name='song_favorite',on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.favourite_name
+    class Meta:
+        unique_together = ('user_favorite', 'song_favorite')
+
+    def __unicode__(self):
+        return u'%s follows %s' % (self.user_favorite, self.song_favorite)
 
 class Profile (models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

@@ -4,18 +4,12 @@ import numpy as np
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminCreationForm, UserAdminChangeForm
-from .models import Song, Artist, Category, Album, Review, User, Profile, Follow
+from .models import Song, Artist, Category, Album, Review, User, Profile, Follow, Favorite
 
 
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'hot')
-    # fields = ['title']
-
-
-# class SongInline(admin.TabularInline):
-#     model = Song
-
+    list_display = ('id','title', 'category', 'hot')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -53,6 +47,11 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id','user')
 
 admin.site.register(Follow)
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+   fields = ['user_favorite', 'song_favorite']
+
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
