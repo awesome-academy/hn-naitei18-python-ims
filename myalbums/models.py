@@ -97,7 +97,7 @@ class Song(models.Model):
 
     def average_rating(self):
         all_ratings = map(lambda x: x.rating, self.review_set.all())
-        return np.mean(all_ratings)
+        return np.mean(list(all_ratings))
 
     def get_lyric(self):
          return Lyric.objects.filter(song=self)
@@ -267,6 +267,21 @@ class Review(models.Model):
 
     def __str__(self):
         return self.content_review
+
+    @property
+    def actual_rating(self):
+        list_of_stars = []
+        for star in range(self.rating):
+            list_of_stars.append(star)
+        return list_of_stars
+
+    @property
+    def hidden_rating(self):
+        list_of_stars = []
+        for star in range(5 - self.rating):
+            list_of_stars.append(star)
+        return list_of_stars
+
 
 
 class Follow(models.Model):

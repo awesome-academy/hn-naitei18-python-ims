@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, DetailView, DeleteView, ListView
 from .models import Song, Artist, Category, Album, Review, User, Profile
 # from utils.song_utils import generate_key
+
 from .forms import UserUpdateForm, ProfileUpdateForm, LyricAddForm
 from .forms import RegisterForm
 from tinytag import TinyTag
@@ -15,6 +16,8 @@ from django.views.generic.list import BaseListView
 from .models import *
 # from utils.song_utils import generate_key
 from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import RegisterForm, ReviewForm
+from django.shortcuts import  get_object_or_404
 
 def index(request):
     context = {
@@ -195,9 +198,19 @@ def addlyric(request, pk):
 
     return render(request, 'myalbums/lyric_add.html', context)
 
-
-
-
-
-
-
+@login_required
+def ReviewAdd(request, pk):
+    user = request.user
+    song = get_object_or_404(Song, pk=pk)
+    form = ReviewForm()
+    context = {
+        'user': user,
+        'song': song,
+        'form': form,
+    }
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, initial={'user': user, 'song': song})
+        if form.is_valid():
+            form.save()
+            return redirect('song-detail',pk)
+    return render(request, 'myalbums/review_form.html', context)    
