@@ -79,6 +79,7 @@ class Song(models.Model):
         'Album', help_text='Select album for this song')
     hot = models.BooleanField(default=False)
     thumbnail = models.ImageField(upload_to="thumbnails", blank=False,default="default.jpeg")
+    song = models.FileField(upload_to="song_directory_path", default="default.mp3")
     playtime = models.CharField(max_length=10, default="0.00")
 
     @property
@@ -97,6 +98,10 @@ class Song(models.Model):
     def average_rating(self):
         all_ratings = map(lambda x: x.rating, self.review_set.all())
         return np.mean(all_ratings)
+
+    def get_lyric(self):
+         return Lyric.objects.filter(song=self)
+
 
 
 

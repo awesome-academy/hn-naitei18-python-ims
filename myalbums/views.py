@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, DetailView, DeleteView, ListView
 from .models import Song, Artist, Category, Album, Review, User, Profile
 # from utils.song_utils import generate_key
-from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import UserUpdateForm, ProfileUpdateForm, LyricAddForm
 from .forms import RegisterForm
 from tinytag import TinyTag
 from django.http import  HttpResponseRedirect
@@ -32,12 +32,7 @@ class CategoryListView(ListView):
 class CategoryDetailView(DetailView):
     model = Category
 
-
 class SongListView(ListView):
-    model = Song
-
-
-class SongDetailView(DetailView):
     model = Song
 
 
@@ -180,6 +175,27 @@ def favorite(request, pk):
 class FavoriteListView(ListView):
     model = Song
     template_name = 'myalbums/favorite.html'
+
+def addlyric(request, pk):
+    user = request.user
+    song = get_object_or_404(Song, pk=pk)
+    # content = Lyric.content
+    form = LyricAddForm()
+    context = {
+        'user': user,
+        'song': song,
+        # 'content': content,
+        'form': form,
+    }
+    if request.method == 'POST':
+            form = LyricAddForm(request.POST, initial={'user': user, 'song': song})
+            if form.is_valid():
+                form.save()
+                return redirect('song-detail', pk)
+
+    return render(request, 'myalbums/lyric_add.html', context)
+
+
 
 
 
