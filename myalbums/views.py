@@ -1,9 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, DetailView, DeleteView, ListView
 from .models import Song, Artist, Category, Album, Review, User, Profile
 # from utils.song_utils import generate_key
@@ -11,6 +10,11 @@ from .forms import UserUpdateForm, ProfileUpdateForm
 from .forms import RegisterForm
 from tinytag import TinyTag
 from django.http import  HttpResponseRedirect
+from tinytag import TinyTag
+from django.views.generic.list import BaseListView
+from .models import *
+# from utils.song_utils import generate_key
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 def index(request):
     context = {
@@ -56,6 +60,7 @@ def profile(request):
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
     context = {
+        'user': request.user,
         'u_form': u_form,
         'p_form': p_form
     }
@@ -97,4 +102,42 @@ class SearchSongListView(ListView):
             return  Song.objects.filter(title__icontains=query)
         else :
             return  Song.objects.all()
-       
+
+class StationListView(ListView):
+    model = User
+    template_name = 'myalbums/user_list.html'
+
+@login_required()
+def follow(request, pk):
+    if request.method == 'GET':
+        user = request.user
+        to_user = get_object_or_404(User, pk=pk)
+        is_followed = 0
+
+        try:
+            followed = Follow.objects.get(follower=user, following=to_user)
+            if followed:
+                is_followed = 1
+        except:
+            pass
+
+        context = {
+            'user': user,
+            'to_user': to_user,
+            'is_followed': is_followed,
+        }
+        return render(request, 'myalbums/user_detail.html', context=context)
+    elif request.method == 'POST':
+        user = request.user
+        to_user = get_object_or_404(User, pk=pk)
+
+        try:
+            followed = Follow.objects.get(follower=user, following=to_user)
+            if followed:
+                followed.delete()
+        except:
+            follow = Follow(follower=user, following=to_user)
+            follow.save()
+
+        url = request.META.get('HTTP_REFERER')
+        return HttpResponseRedirect(url)

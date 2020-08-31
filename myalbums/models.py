@@ -1,6 +1,7 @@
 from django.db import models
+from django.shortcuts import render
 from django.urls import reverse
-from datetime import date
+from datetime import datetime
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 import numpy as np
@@ -10,6 +11,7 @@ from django.contrib.auth.models import (
 from time import strftime, gmtime
 from PIL import Image
 from django.db.models.signals import post_save
+from django.conf import settings
 
 
 class MyModelName(models.Model):
@@ -161,9 +163,9 @@ class User(AbstractBaseUser):
     staff = models.BooleanField(default=False)  # a admin user; non super-user
     admin = models.BooleanField(default=False)  # a superuser
     # notice the absence of a "Password field", that is built in.
-    object = UserManager()
+    objects = UserManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []  # Email & Password are required by default.
+    REQUIRED_FIELDS = []  # Email & Password are required by default# .
 
     def __str__(self):
         return self.username
@@ -204,6 +206,26 @@ class User(AbstractBaseUser):
         "Is the user active?"
         return self.active
 
+    def get_followers(self):
+        return Follow.objects.filter(following=self).count()
+
+    def get_followings(self):
+        return Follow.objects.filter(follower=self).count()
+
+    def list_follower(self):
+        followers = Follow.objects.filter(following=self)
+        users = list()
+        for follower in followers:
+            users.append(User.objects.get(email=follower.follower))
+        return users
+
+    def list_following(self):
+        followings = Follow.objects.filter(follower=self)
+        users = list()
+        for following in followings:
+            users.append(User.objects.get(email=following.following))
+        return users
+
 
 class Comment(models.Model):
     review = models.ForeignKey(
@@ -234,18 +256,16 @@ class Review(models.Model):
         return self.content_review
 
 
-class Follower(models.Model):
-    follower = models.ForeignKey(
-        'User', related_name='following', on_delete=models.CASCADE)
-    following = models.ForeignKey(
-        'User', related_name='followers', on_delete=models.CASCADE)
+class Follow(models.Model):
+    follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
+    date_added = models.DateTimeField(default=datetime.now)
 
     class Meta:
         unique_together = ('follower', 'following')
 
-    def __str__(self):
-        return '%s follows %s'%(self.follower, self.following)
-
+    def __unicode__(self):
+        return u'%s follows %s' % (self.follower, self.following)
 
 class Favourite(models.Model):
     favourite_name = models.CharField(max_length=50)
@@ -257,8 +277,8 @@ class Favourite(models.Model):
         return self.favourite_name
 
 class Profile (models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='avatar.jpg',upload_to='profile_pics')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    image = models.ImageField(default='avatar.jpg',upload_to='profile_pics', null=True)
 
     def __str__(self):
         return f'{self.user.username}Profile'
@@ -272,6 +292,9 @@ class Profile (models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+    def get_absolute_url(self):
+        return reverse('follow', args=[str(self.user.id)])
 
 
 def create_user_profile(sender, instance, created, **kwargs):

@@ -72,12 +72,26 @@
                                         </div>
 
                 </div>
-                 <div class="card-header"><h6 class="card-title mb-0">Your Follow</h6></div>
                 <div class="row">
                     <div class="col-sm-9 col-md-6 ">
-                        <button class="btn btn-outline-info" type="submit"> Follower</button></div>
+                        <h6 class="card-title mb-0">Follower: {{ user.followers.count }}</h6>
+                        <br> </br>
+                        {% for follow in user.list_follower  %}
+                            <a href="{{ follow.profile.get_absolute_url }}">{{ follow.username }}</a>
+                            <hr>
+                        {% endfor %}
+
+                        </div>
+
                     <div class="col-sm-9 col-md-6 ">
-                        <button class="btn btn-outline-info" type="submit"> Following</button></div>
+                       <h6 class="card-title mb-0">Following: {{ user.following.count }}</h6>
+                        <br> </br>
+                        {% for follow in user.list_following  %}
+                            <a href="{{ follow.profile.get_absolute_url }}">{{ follow.username }}</a>
+                            <hr>
+                        {% endfor %}
+
+                    </div>
                 </div>
             </div>
 
