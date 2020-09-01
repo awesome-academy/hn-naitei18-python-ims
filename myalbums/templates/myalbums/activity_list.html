@@ -1,0 +1,53 @@
+{% extends 'layouts/base_generic.html' %}
+{% load i18n  %}
+{% load static %}
+
+{% block content %}
+
+    <main id="pageWrapper">
+
+        <div class="banner bg-home"></div>
+        <div class="main-container">
+
+            <h1>History</h1>
+            <h5>Where you can see your and following's activity</h5>
+            <hr>
+            <br> </br>
+            <br> </br>
+            {% for activity in activity_list reversed %}
+            {% for activity_user in activity.user.list_follower  %}
+                {% if activity.user.id != request.user.id %}
+            <div class="section">
+                <div class="heading">
+                    <div class="d-flex flex-wrap align-items-end">
+                        <img  class="circular--landscape" src="{{ activity.user.profile.image.url }}" style="width: 100px; height: 100px">
+                        <div class="col-xl-3 col-lg-3 col-sm-3"><h4><a href="{{ activity.user.profile.get_absolute_url }}" >{{ activity.user.username}}</a></h4>
+                       </div>
+                        <div class="col-xl-4 "><h5>{{ activity.activity }}</h5></div>
+                        <div class="col-xl-3 "><p>{{ activity.datetime }}</p></div>
+                </div>
+                    <hr>
+            </div>
+            </div>
+                {% else %}
+                    <div class="section" >
+                <div class="heading" >
+                    <div class="d-flex flex-wrap align-items-end" >
+                        <img  class="circular--landscape" src="{{ activity.user.profile.image.url }}" style="width: 100px; height: 100px">
+                        <div class="col-xl-3 col-lg-3 col-sm-3"><h4><a href="{{ activity.user.profile.get_absolute_url }}"> you </a></h4>
+                       </div>
+                        <div class="col-xl-4 "><h5>{{ activity.activity }}</h5></div>
+                        <div class="col-xl-3 "><p>{{ activity.datetime }}</p></div>
+                </div>
+                    <hr>
+            </div>
+            </div>
+                {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </div>
+        {% include 'includes/footer.html' %}
+
+    </main>
+
+{% endblock %}
