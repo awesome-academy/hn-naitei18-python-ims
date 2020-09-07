@@ -4,7 +4,7 @@ import numpy as np
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminCreationForm, UserAdminChangeForm
-from .models import Song, Artist, Category, Album, Review, User, Profile, Follow, Favorite, Lyric, Activity
+from .models import Song, Artist, Category, Album, Review, User, Profile, Follow, Favorite, Lyric, Activity, Comment
 
 
 @admin.register(Song)
@@ -87,3 +87,4 @@ admin.site.register(Lyric)
 admin.site.unregister(Group)
 
 admin.site.register(Activity)
+admin.site.register(Comment)

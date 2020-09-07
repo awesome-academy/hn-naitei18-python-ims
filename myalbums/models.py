@@ -251,13 +251,14 @@ class User(AbstractBaseUser):
 
 class Comment(models.Model):
     review = models.ForeignKey(
-        'Review', on_delete=models.CASCADE, related_name='comments')
+        'Review', on_delete=models.CASCADE)
     # comment = models.ForeignKey('Comment', max_length=200, on_delete=models.SET_NULL)
     text = models.TextField()
     date_comment = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.comment
+    # def __str__(self):
+    #     return self.comment
 
 
 class Review(models.Model):
