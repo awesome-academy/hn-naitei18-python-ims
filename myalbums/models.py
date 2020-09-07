@@ -340,3 +340,16 @@ def create_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
 
 post_save.connect(create_user_profile, sender=User)
+
+class Activity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(default=timezone.now)
+    ACTIVITY_TYPE = (
+        ('follow', 'Follow'),
+        ('unfollow', 'Unfollow'),
+        ('favorite', 'Favorite'),
+        ('unfavorite', 'Unfavorite'),
+        ('review', 'Review')
+    )
+    activity_type = models.CharField( max_length=200, choices=ACTIVITY_TYPE, blank=True )
+    activity = models.TextField()

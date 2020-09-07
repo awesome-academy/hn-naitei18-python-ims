@@ -24,8 +24,8 @@ def index(request):
     context = {
         'artists' : Artist.objects.all()[:6],
         'genres': Category.objects.all()[:6],
-        'latest_songs': Song.objects.all()[len(a)-3:len(a)],
-        'latest_songs_2': Song.objects.all()[len(a)-5:len(a)],
+        # 'latest_songs': Song.objects.all()[len(a)-3:len(a)],
+        # 'latest_songs_2': Song.objects.all()[len(a)-5:len(a)],
     }
     return render(request, "index.html", context)
 
@@ -135,12 +135,19 @@ def follow(request, pk):
             followed = Follow.objects.get(follower=user, following=to_user)
             if followed:
                 followed.delete()
+                content = ' Unfollowed  : ' + to_user.username
+                activity = Activity(user=user, activity_type='unfollow', activity=content)
+                activity.save()
         except:
             follow = Follow(follower=user, following=to_user)
             follow.save()
+            content = ' Now following  : ' + to_user.username
+            activity = Activity(user=user, activity_type='follow', activity=content)
+            activity.save()
 
         url = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(url)
+
 
 @login_required()
 def favorite(request, pk):
@@ -170,10 +177,15 @@ def favorite(request, pk):
             favorited = Favorite.objects.get(user_favorite = user, song_favorite = favorite)
             if favorited:
                 favorited.delete()
+                content = ' Disliked : ' + favorite.title
+                activity = Activity(user=user, activity_type='unfavorite', activity=content)
+                activity.save()
         except:
             favorited = Favorite(user_favorite = user, song_favorite = favorite)
             favorited.save()
-
+            content = ' Liked : ' + favorite.title
+            activity = Activity(user = user, activity_type='favorite', activity= content)
+            activity.save()
         url = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(url)
 
@@ -214,6 +226,9 @@ def ReviewAdd(request, pk):
         form = ReviewForm(request.POST, initial={'user': user, 'song': song})
         if form.is_valid():
             form.save()
+            content = ' had reviewed : ' + song.title
+            activity = Activity(user=user, activity_type='review', activity = content)
+            activity.save()
             return redirect('song-detail',pk)
     return render(request, 'myalbums/review_form.html', context)
 
@@ -281,4 +296,23 @@ class SongUploadView(CreateView):
             'message': "Successfully submitted form data.",
             'redirect': reverse_lazy('song-detail', kwargs={'pk': form.instance.id})
         }
-        return JsonResponse(data)
+
+        return redirect('song')
+
+class ActivityListView(ListView):
+    template_name = 'activity_list.html'
+    model = Activity
+    # paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super(ActivityListView, self).get_context_data(**kwargs)
+        followings = Follow.objects.filter(follower=self.request.user)
+        user_list = [self.request.user]
+        for following in followings:
+            user_list.append(following.following)
+        activity_list = Activity.objects.filter(user__in=user_list).order_by('-id')
+        context.update({
+            'history': activity_list
+        })
+        return context
+

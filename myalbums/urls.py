@@ -23,6 +23,8 @@ urlpatterns = [
     path('station/', StationListView.as_view(), name='user-list'),
     path('station/<int:pk>', views.follow, name='follow'),
     path('favorite/', views.FavoriteListView.as_view(), name='favorite'),
-    path('review/<int:pk>/create', ReviewAdd, name='review_create')
+    path('review/<int:pk>/create', ReviewAdd, name='review_create'),
+	path('history/', views.ActivityListView.as_view(), name='history')
+
 
 ]
