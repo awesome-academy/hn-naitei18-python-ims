@@ -300,7 +300,7 @@ class SongUploadView(CreateView):
         return redirect('song')
 
 class ActivityListView(ListView):
-    template_name = 'activity_list.html'
+    template_name = 'myalbums/activity_list.html'
     model = Activity
     # paginate_by = 5
 
