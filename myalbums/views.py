@@ -44,7 +44,6 @@ environ.Env.read_env()
 
 
 def index(request):
-    a = Song.objects.all()
     context = {
         'artists' : Artist.objects.all()[:6],
         'genres': Category.objects.all()[:6],
@@ -277,7 +276,6 @@ def ReviewAdd(request, pk):
     user = request.user
     song = get_object_or_404(Song, pk=pk)
     form = ReviewForm()
-    # review = get_object_or_404(Review, pk=pk)
     context = {
         'user': user,
         'song': song,
@@ -418,3 +416,19 @@ def CommentAdd(request, pk):
     template = 'myalbums/song_detail.html'
     context = {'form': form}
     return render(request, template, context)
+
+def show_notification(request, notification_id):
+    n = Notification.objects.get(id=notification_id)
+    return render (request, 'myalbums/notification.html', {'notification':n})
+
+def show_notification(request):
+    object_list = Notification.objects.all()
+    n = Notification.objects.last()
+    return render (request, 'myalbums/notification.html', {'notification': n, 'object_list':object_list})
+
+def delete_notification(request, notification_id):
+    n = Notification.objects.get(id=notification_id)
+    n.viewed = True
+    n.save()
+
+    return HttpResponseRedirect('myalbums/notification.html', {'notification':n})

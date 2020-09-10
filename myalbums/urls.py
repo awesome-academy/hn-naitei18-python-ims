@@ -29,4 +29,6 @@ urlpatterns = [
     path('comment/<int:pk>/create', CommentAdd , name='AddComment'),
     path('activate/<uidb64>/<token>', activate, name='activate'),
     url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico')),
+	# path(r'^delete/(?P<notification_id>\d+)/$', name='delete_notification'),
+	path('show/', views.show_notification, name='show_notification'),
 ]
