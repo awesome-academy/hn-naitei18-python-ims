@@ -1,0 +1,41 @@
+{% extends '../layouts/base_generic.html' %}
+{% load static %}
+
+
+{% block content %}
+
+    <main id="pageWrapper">
+        <div class="banner bg-song"></div>
+        <div class="main-container">
+        <div class="col-6 ml-2">
+                </div>
+                <div class="col-12">
+                    <hr>
+                    <div>
+                        <p>{{ notification.message }}</p>
+{#                        <p><a href="/notification/delete/{{ notification.id }}">Mark as read</a></p>#}
+                    </div>
+                </div>
+        {% if object_list.count > 0 %}
+            <h2>Notifications</h2>
+            <br>    
+            <h3> New: {{ notification.title }}</h3>
+            {% for n in object_list %}
+                <p><a href="/song/{{ n.notification_song.id }}"> {{ n.id }}/{{ count }}   -   {{ n.notification_song }}   -   {{ n.title }}</a></p>
+                <p>--------------------------------------------------------------------------------------------------</p>
+            {% endfor %}
+        {% endif %}
+                </div>
+                </div>
+        {% include 'includes/footer.html' %}
+    </main>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/amplitudejs@5.0.2/dist/amplitude.min.js"></script>
+    <script src="{% static 'js/wavesurfer.min.js' %}"></script>
+    <script src="{% static 'js/song_js.js' %}"></script>
+
+{% endblock %}

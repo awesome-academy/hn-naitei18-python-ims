@@ -61,6 +61,16 @@
                         <span>{% trans 'History' %}</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{% url 'show_notification'%}" class="nav-link" style="padding: 5px 24px 5px 24px">
+                        <i class="la la-bell"></i>
+                        <p style="margin: 5px 0 5px 0">Notificaiton</p>
+{#                        <span class="badge badge-danger" style="border-radius: 100px; padding: 0">#}
+{#                            {% if object_list.count >= 0 %}#}
+{#                                <p style="margin: 5px; font-size: 13px">{{ n.id }}</p>#}
+{#                            {% endif %}#}
+{#                        </span>#}
+                    </a>
             {% endif %}
         </ul>
     </nav>
