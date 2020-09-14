@@ -8,8 +8,9 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, DeleteView, ListView
 from .models import Song, Artist, Category, Album, Review, User, Profile
 # from utils.song_utils import generate_key
-from .forms import UserUpdateForm, ProfileUpdateForm, LyricAddForm, ReviewForm, SongUploadForm, CommentForm
-from .forms import RegisterForm
+
+from .forms import UserUpdateForm, ProfileUpdateForm, LyricAddForm, ReviewForm, SongUploadForm
+from .forms import RegisterForm, CommentForm
 from tinytag import TinyTag
 from django.http import  HttpResponseRedirect
 from tinytag import TinyTag
@@ -138,14 +139,15 @@ def register(request):
 # user = get_object_or_404(User, pk=uid)
 def activate(request, uidb64, token):
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = User._default_manager.get(pk=uid)
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
-    if user is not None and default_token_generator.check_token(user, token):
-        user.active = True
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
         user.save()
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+
     else:
         return HttpResponse('Activation link is invalid!')
 
@@ -211,6 +213,7 @@ def favorite(request, pk):
     if request.method == 'GET':
         user = request.user
         favorite = get_object_or_404(Song, pk=pk)
+        # review = Review.objects.get(user_review = user , song_review = favorite)
         is_favorite = 0
 
         try:
@@ -224,6 +227,7 @@ def favorite(request, pk):
             'user': user,
             'favorite': favorite,
             'is_favorite': is_favorite,
+            # 'review' : review,
         }
         return render(request, 'myalbums/song_detail.html', context=context)
     elif request.method == 'POST':
@@ -292,19 +296,43 @@ def ReviewAdd(request, pk):
 
 
 # @login_required
-# def upload(request):
+# def CommentAdd(request, pk):
 #     user = request.user
-#     form = SongUploadForm()
+#     # user = form.save(commit=False)
+#     review = get_object_or_404(Review, pk=pk)
+#     form = CommentForm()
 #     context = {
 #         'user': user,
+#         'review': review,
 #         'form': form,
 #     }
 #     if request.method == 'POST':
-#         form = ReviewForm(request.POST, initial={'user': user})
+#         form = CommentForm(request.POST, initial={'review': review})
 #         if form.is_valid():
 #             form.save()
-#             return redirect('song')
-#     return render(request, 'myalbums/create.html', context)
+#             return redirect('song-detail',pk)
+#     return render(request, 'myalbums/song_detail.html', { 'form': form })
+
+
+
+@login_required
+def CommentAdd(request, pk):
+    url = request.META.get('HTTP_REFERER')  # get last url
+    review = get_object_or_404(Review, pk=pk)
+    # comments = review.content.get(review=review)
+    if request.method == 'POST':  # check post
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = Comment()
+            comment.review = review
+            comment.text = form.cleaned_data['text']
+            # return HttpResponse(comment.text)
+            comment.user = request.user
+            comment.save()
+            return HttpResponseRedirect(url)
+    template = 'myalbums/song_detail.html'
+    context = {'form': form}
+    return render(request, template, context)
 
 
 class SongUploadView(CreateView):
