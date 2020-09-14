@@ -24,7 +24,6 @@ urlpatterns = [
     path('station/<int:pk>', views.follow, name='follow'),
     path('favorite/', views.FavoriteListView.as_view(), name='favorite'),
     path('review/<int:pk>/create', ReviewAdd, name='review_create'),
-	path('history/', views.ActivityListView.as_view(), name='history')
-
-
+	path('history/', views.ActivityListView.as_view(), name='history'),
+	path('comment/<int:pk>/create', CommentAdd , name='AddComment'),
 ]

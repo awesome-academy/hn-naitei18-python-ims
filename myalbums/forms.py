@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Profile, Lyric, Review, Song
+from .models import User, Profile, Lyric, Review, Song, Comment
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.forms import UserCreationForm
 
@@ -111,3 +111,8 @@ class SongUploadForm(forms.ModelForm):
 
     def clean_user(self):
         return self.user
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']

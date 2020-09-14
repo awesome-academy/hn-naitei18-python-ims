@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, DeleteView, ListView
 from .models import Song, Artist, Category, Album, Review, User, Profile
 # from utils.song_utils import generate_key
-from .forms import UserUpdateForm, ProfileUpdateForm, LyricAddForm, ReviewForm, SongUploadForm
+from .forms import UserUpdateForm, ProfileUpdateForm, LyricAddForm, ReviewForm, SongUploadForm, CommentForm
 from .forms import RegisterForm
 from tinytag import TinyTag
 from django.http import  HttpResponseRedirect
@@ -24,8 +24,8 @@ def index(request):
     context = {
         'artists' : Artist.objects.all()[:6],
         'genres': Category.objects.all()[:6],
-        # 'latest_songs': Song.objects.all()[len(a)-3:len(a)],
-        # 'latest_songs_2': Song.objects.all()[len(a)-5:len(a)],
+        'latest_songs': Song.objects.all(),
+       # [len(a) - 3: len(a)],[len(a)-5:len(a)]
     }
     return render(request, "index.html", context)
 
@@ -217,6 +217,7 @@ def ReviewAdd(request, pk):
     user = request.user
     song = get_object_or_404(Song, pk=pk)
     form = ReviewForm()
+    review = get_object_or_404(Review, pk=pk)
     context = {
         'user': user,
         'song': song,
@@ -297,7 +298,7 @@ class SongUploadView(CreateView):
             'redirect': reverse_lazy('song-detail', kwargs={'pk': form.instance.id})
         }
 
-        return redirect('song')
+        return JsonResponse(data)
 
 class ActivityListView(ListView):
     template_name = 'myalbums/activity_list.html'
@@ -316,3 +317,21 @@ class ActivityListView(ListView):
         })
         return context
 
+@login_required
+def CommentAdd(request, pk):
+    url = request.META.get('HTTP_REFERER')  # get last url
+    review = get_object_or_404(Review, pk=pk)
+    # comments = review.content.get(review=review)
+    if request.method == 'POST':  # check post
+        form = CommentForm(request.POST)
+        if form.is_valid():
+
+            text = form.cleaned_data['text']
+            # return HttpResponse(comment.text)
+            user = request.user
+            comment = review.comment_set.create(text=text,user=user)
+            comment.save()
+            return HttpResponseRedirect(url)
+    template = 'myalbums/song_detail.html'
+    context = {'form': form}
+    return render(request, template, context)
