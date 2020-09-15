@@ -29,3 +29,25 @@ class ReviewAddTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
+from django.test import TestCase
+from django.urls import reverse
+from myalbums.models import *
+
+class ArtistListViewTest(TestCase):
+    @classmethod
+
+    def setUpTestData(cls):
+        Artist.objects.create(name_artist='Ly',biography='hello world')
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/artist/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('artist'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('artist'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'myalbums/artist_list.html')
