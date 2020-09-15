@@ -27,6 +27,6 @@ urlpatterns = [
     path('review/<int:pk>/create', ReviewAdd, name='review_create'),
     path('history/', views.ActivityListView.as_view(), name='history'),
     path('comment/<int:pk>/create', CommentAdd , name='AddComment'),
-    path('/activate/<uidb64>/<token>', activate, name='activate'),
+    path('activate/<uidb64>/<token>', activate, name='activate'),
     url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico')),
 ]

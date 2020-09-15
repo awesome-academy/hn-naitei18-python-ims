@@ -127,7 +127,7 @@
                     <hr>
                 </div>
                 <div class="carousel-item-5 arrow-pos-3">
-                    {% for song in latest_songs_2 %}
+                    {% for song in latest_songs %}
                         <div class="custom-card">
                             <div class="custom-card--img">
                                 <div class="custom-card--info">
@@ -166,14 +166,14 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <a href="javascript:void(0);"
+                                <a href="{{ song.get_absolute_url }}"
                                    >
                                     <img src="{{ song.thumbnail.url }}" alt=""
                                          style="height: 180px; width: 290px"
                                          class="card-img--radius-lg">
                                 </a>
                             </div>
-                            <a href="#" class="custom-card--link mt-2">
+                            <a href="{{ song.get_absolute_url }}" class="custom-card--link mt-2">
                                 <h6 style="overflow: hidden">{{ song.title }}</h6>
                                 <p>{{ song.artist.all|join:',' }}</p>
                             </a>
@@ -196,7 +196,7 @@
                                 <div class="col-xl-3 col-lg-4 col-sm-6 pb-4">
                                     <div class="custom-card">
                                         <div class="custom-card--img">
-                                            <a href="#">
+                                            <a href="{{ artist.get_absolute_url }}">
                                                 <img src="{% static 'images/artists/default.jpg' %}" alt="Artist" class="card-img--radius-md" style="filter: blur(4px)">
                                                 <span class="bg-blur">{{ artist.name_artist }}</span>
                                             </a>

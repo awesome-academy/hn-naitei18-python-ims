@@ -48,8 +48,7 @@ def index(request):
     context = {
         'artists' : Artist.objects.all()[:6],
         'genres': Category.objects.all()[:6],
-        'latest_songs': Song.objects.all()[len(a)-3:len(a)],
-        'latest_songs_2': Song.objects.all()[len(a)-5:len(a)],
+        'latest_songs': Song.objects.all(),
     }
     return render(request, "index.html", context)
 
@@ -278,7 +277,7 @@ def ReviewAdd(request, pk):
     user = request.user
     song = get_object_or_404(Song, pk=pk)
     form = ReviewForm()
-    review = get_object_or_404(Review, pk=pk)
+    # review = get_object_or_404(Review, pk=pk)
     context = {
         'user': user,
         'song': song,
