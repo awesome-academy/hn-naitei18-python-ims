@@ -44,3 +44,41 @@ class ReviewModelTest(TestCase):
         review = Review.objects.get(id=1)
         field_label = review._meta.get_field('rating').verbose_name
         self.assertEquals(field_label,'rating')
+
+
+from django.test import TestCase
+from myalbums.models import *
+
+class ArtistModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        Artist.objects.create(name_artist='Ly',biography='hello world')
+
+    def test_name_artist_label(self):
+        artist = Artist.objects.get(id=1)
+        field_label = artist._meta.get_field('name_artist').verbose_name
+        self.assertEquals(field_label,'name artist')
+
+    def test_name_artist_max_length(self):
+        artist = Artist.objects.get(id=1)
+        max_length = artist._meta.get_field('name_artist').max_length
+        self.assertEquals(max_length, 50)
+
+    def test_birthday_label(self):
+        artist = Artist.objects.get(id=1)
+        field_label = artist._meta.get_field('birthday').verbose_name
+        self.assertEquals(field_label,'birthday')
+
+    def test_biography_label(self):
+        artist = Artist.objects.get(id=1)
+        field_label = artist._meta.get_field('biography').verbose_name
+        self.assertEquals(field_label,'biography')
+
+    def test_biography_max_length(self):
+        artist = Artist.objects.get(id=1)
+        max_length = artist._meta.get_field('biography').max_length
+        self.assertEquals(max_length, 400)
+
+    def test_get_absolute_url(self):
+        artist = Artist.objects.get(id=1)
+        self.assertEquals(artist.get_absolute_url(), '/artist/1')
