@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.functions import math
+from django.dispatch import receiver
 from django.shortcuts import render
 from django.urls import reverse
 from datetime import datetime
@@ -349,3 +350,14 @@ class Activity(models.Model):
     )
     activity_type = models.CharField( max_length=200, choices=ACTIVITY_TYPE, blank=True )
     activity = models.TextField()
+
+class Notification(models.Model):
+    title = models.CharField(max_length=200)
+    viewed = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+@receiver(post_save, sender=User)
+def create_notification_lyric(sender, **kwargs):
+    if kwargs.get('created', False):
+        Notification.objects.create(user=kwargs.get('instance'),
+                                    title="Song'lyric is accepted")
